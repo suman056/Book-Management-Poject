@@ -3,6 +3,7 @@ const validate = require("../validator/validation")
 
 
 
+
 const verifyPassword = function (password) {
     
     //minimum password length validation  
@@ -79,14 +80,14 @@ const checkCreate = function (req, res, next) {
             return res.status(400).send({ status: false, msg: " Name should be in valid format" })
         }
 
+        if (!/^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/.test(phone)) {
+            return res.status(400).send({ status: false, msg: "Mobile number should be in valid format" })
+        }
         if (!verifyEmail(email)) {
             return res.status(400).send({ status: false, msg: "Email format is invalid" })
 
         }
 
-        if (!/^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/.test(mobile)) {
-            return res.status(400).send({ status: false, msg: "Mobile number should be in valid format" })
-        }
 
         const result = verifyPassword(password)
         if (result != true) {
@@ -107,29 +108,32 @@ const checkLogin = function (req, res, next) {
     try{
     
         const requestBody = req.body
+            
 
             if (!validate.isValidRequestBody(requestBody)) {
                 return res.status(400).send({ status: false, message: "Request body is empty!! Please provide the email and password" })
             }
 
+
+            const {email, password} = requestBody
             
-            
-            if (!isValidData(email)) {
-                return res.status(400).send({ status: false, msg: "Please provide valid email" })
+
+            if (!validate.isValidData(email)) {
+                return res.status(400).send({ status: false, msg: "Please provide email" })
     
             }
 
-
-            if (!isValidData(password)) {
-                return res.status(400).send({ status: false, msg: "Please provide valid password" })
+           
+            if (!validate.isValidData(password)) {
+                return res.status(400).send({ status: false, msg: "Please provide password" })
     
             }
 
-            if (verifyEmail(email)) {
+            if (!verifyEmail(email)) {
                 return res.status(400).send({ status: false, msg: "Email format is invalid" })
     
             }
-            
+
 
             const result = verifyPassword(password)
             if (result != true) {

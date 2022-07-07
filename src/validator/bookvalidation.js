@@ -75,23 +75,19 @@ const bookvalidation = async function (req, res, next) {
     }
     }
 
-    //validating reviews is number only
-    // if (typeof data.reviews !== "number") {
-    //     return res.status(400).send({status: false,msg: "enter a number",
-    //         });
-    //     }
+ 
     if(!data.releasedAt){
         return res.status(400).send({status:false,msg:"releasedAt is not given"})
     }
    
     
-    // if(data.releasedAt !== "^\\d{4}-\\d{2}-\\d{2}$"){   
-    //      if(data.releasedAt !== moment().format("YYYY-MM-DD")){
-    //     return res.status(400).send({status:false,msg:"date format should be in YYYY-MM-DD"})
+    if(data.releasedAt !== "^\\d{4}-\\d{2}-\\d{2}$"){   
+         if(data.releasedAt !== moment().format("YYYY-MM-DD")){
+        return res.status(400).send({status:false,msg:"date format should be in YYYY-MM-DD"})
     
 
-
+         }
     next()
 }
-
+}
 module.exports = bookvalidation
