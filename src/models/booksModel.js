@@ -46,10 +46,8 @@ const bookSchema = new mongoose.Schema({
         default: moment().format("YYYY-MM-DD"),
         required: true,
     },
-    deletedAt: { type: Date }
+    deletedAt: { type: Date },
 
-},
-    { timestamps: true }
-);
+}, { timestamps: true });
 
 module.exports = mongoose.model('book', bookSchema);
