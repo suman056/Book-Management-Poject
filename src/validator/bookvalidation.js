@@ -61,8 +61,7 @@ const bookvalidation = async function (req, res, next) {
     if (data.subcategory.length == 0) {
         return res.status(400).send({ status: false, msg: "subcategory is not valid" });
     }
-    // if(typeof data.subcategory !=="object")
-    // return res.status(400).send({status:false,msg:"give subcategory in array only"})
+
 
     if (data.subcategory) {
         for (let i = 0; i < data.subcategory.length; i++) {

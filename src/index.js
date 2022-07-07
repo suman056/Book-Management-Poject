@@ -9,7 +9,7 @@ app.use(bodyParser)
 
 mongoose.connect("mongodb+srv://Jagcho:71nEXJtXcYfVx8T6@cluster0.5bg4mzz.mongodb.net/group25Database"
     , { useNewUrlParser: true })
-    .then(() => console.log(" Hey...MongoDb is connected"))
+    .then(() => console.log("MongoDb is connected"))
     .catch(err => console.log(err))
 
 app.use("/", route)

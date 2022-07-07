@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { isValidRequestBody, isValidObjectId, isValidData } = require("../validator/validation")
-
+// const validate = require("../validator/validation")
 
 
 
@@ -119,13 +119,13 @@ const checkLogin = function (req, res, next) {
         const { email, password } = requestBody
 
 
-        if (!validate.isValidData(email)) {
+        if (!isValidData(email)) {
             return res.status(400).send({ status: false, msg: "Please provide email" })
 
         }
 
 
-        if (!validate.isValidData(password)) {
+        if (!isValidData(password)) {
             return res.status(400).send({ status: false, msg: "Please provide password" })
 
         }
