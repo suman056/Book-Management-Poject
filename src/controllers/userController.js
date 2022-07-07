@@ -1,8 +1,6 @@
 const userModel = require('../models/userModel')
 const validate = require("../validator/validation")
 
-
-
 //<<-------------------------------------------CREATE USER---------------------------------------------------->>
 const createUser = async function (req, res) {
     try {
@@ -14,8 +12,8 @@ const createUser = async function (req, res) {
     catch (err) {
         res.status(500).send({ status: false, error: err.message })
     }
-
 }
+
 
 const userLogin = async function (req, res) {
     try {

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const validate = require("../validator/validation")
+const {isValidRequestBody, isValidObjectId, isValidData} = require("../validator/validation")
+
 
 
 
@@ -35,7 +36,7 @@ const checkCreate = function (req, res, next) {
     
         const requestBody = req.body
 
-            if (!validate.isValidRequestBody(requestBody)) {
+            if (!isValidRequestBody(requestBody)) {
                 return res.status(400).send({ status: false, message: "Request body is empty!! Please provide the college details" })
             }
 
@@ -44,23 +45,23 @@ const checkCreate = function (req, res, next) {
         //check if each mandatory field is present in request body
         let missdata = "";
 
-        if (!validate.isValidData(title)) {
+        if (!isValidData(title)) {
             missdata = missdata + "title"
 
         }
-        if (!validate.isValidData(name)) {
+        if (!isValidData(name)) {
             missdata = missdata + " " + "name"
 
         }
-        if (!validate.isValidData(phone)) {
+        if (!isValidData(phone)) {
             missdata = missdata + " " + "phone"
 
         }
-        if (!validate.isValidData(email)) {
+        if (!isValidData(email)) {
             missdata = missdata + " " + "email"
 
         }
-        if (!validate.isValidData(password)) {
+        if (!isValidData(password)) {
             missdata = missdata + " " + "password"
 
         }
@@ -79,14 +80,14 @@ const checkCreate = function (req, res, next) {
             return res.status(400).send({ status: false, msg: " Name should be in valid format" })
         }
 
+        if (!/^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/.test(phone)) {
+            return res.status(400).send({ status: false, msg: "Mobile number should be in valid format" })
+        }
         if (!verifyEmail(email)) {
             return res.status(400).send({ status: false, msg: "Email format is invalid" })
 
         }
 
-        if (!/^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/.test(mobile)) {
-            return res.status(400).send({ status: false, msg: "Mobile number should be in valid format" })
-        }
 
         const result = verifyPassword(password)
         if (result != true) {
@@ -107,29 +108,32 @@ const checkLogin = function (req, res, next) {
     try{
     
         const requestBody = req.body
+            
 
-            if (!validate.isValidRequestBody(requestBody)) {
+            if (!isValidRequestBody(requestBody)) {
                 return res.status(400).send({ status: false, message: "Request body is empty!! Please provide the email and password" })
             }
 
+
+            const {email, password} = requestBody
             
-            
+
             if (!isValidData(email)) {
-                return res.status(400).send({ status: false, msg: "Please provide valid email" })
+                return res.status(400).send({ status: false, msg: "Please provide email" })
     
             }
 
-
+           
             if (!isValidData(password)) {
-                return res.status(400).send({ status: false, msg: "Please provide valid password" })
+                return res.status(400).send({ status: false, msg: "Please provide password" })
     
             }
 
-            if (verifyEmail(email)) {
+            if (!verifyEmail(email)) {
                 return res.status(400).send({ status: false, msg: "Email format is invalid" })
     
             }
-            
+
 
             const result = verifyPassword(password)
             if (result != true) {
