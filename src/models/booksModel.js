@@ -28,7 +28,7 @@ const bookSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    subcategory: {
+    subCategory: {
         type: [String],
         required: true
     },
@@ -46,7 +46,7 @@ const bookSchema = new mongoose.Schema({
         required: true,
     },
     deletedAt: { type: Date }
-
+    //releasedAt:moment(releasedAt).toISOString()
 }, { timestamps: true });
 
 module.exports = mongoose.model('book', bookSchema);
