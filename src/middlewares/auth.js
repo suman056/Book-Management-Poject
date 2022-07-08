@@ -11,19 +11,17 @@ const authentication = function (req, res, next) {
         }
 
         try{
-        var decodedtoken = jwt.verify(token, "##k&&k@@s")
+        var decodedtoken = jwt.verify(token, "group-25")
         }
         catch(err){
             return res.status(401).send({status:false,msg:"token is invalid"})
 
         }
-        // if (!decodedtoken) {
-
-        //     return res.status(401).send({ status: false, msg: "Token invalid" })
-        // }
+        // if (!decodedtoken) {return res.status(401).send({ status: false, msg: "Token invalid" })}
      
 
         req.decodedtoken = decodedtoken
+        // console.log(req.decodedtoken)
         console.log("Successfully Authenticated")
        
         next()
@@ -42,8 +40,11 @@ const authorization = async function (req, res, next) {
         let userId = req.decodedtoken.userId
 
         //userId of the owner of the book
-        let ownerOfBook = "" 
-
+        let ownerOfBook = ""
+       
+        if(!(req.body.userId) && !(req.params.bookId)){
+            return res.status(400).send({status:false,msg:" credential missing for auth"})
+        }
 
         if(req.body.userId){
             const userId = req.body.userId;
@@ -70,8 +71,8 @@ const authorization = async function (req, res, next) {
        
         //check if the logged-in user is requesting to modify their own resources 
         if (ownerOfBook != userId)
-            return res.status(403).send({ status: false, msg: 'Author logged in is not allowed to modify the requested blog data' })
-        
+            return res.status(403).send({ status: false, msg: 'Author logged in is not allowed to modify the requested book data' })
+            console.log("Successfully Authorized")
         next()
     }
     catch (err) {

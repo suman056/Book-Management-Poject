@@ -2,12 +2,13 @@ const bookModel = require("../models/booksModel")
 const reviewModel = require("../models/reviewModel")
 const { isValidRequestBody, isValidObjectId, isValidData } = require("../validator/validation")
 const validator = require('validator')
+const moment = require('moment')
 
 const createBook = async function (req, res) {
     try {
         const data = req.body
-       
         const createbooks = await bookModel.create(data)
+
         res.status(201).send({
             status: true, data: createbooks
         })
@@ -111,8 +112,6 @@ const updateBook = async function (req, res) {
 
         //Validating title and  check Present in DB or Not
         if (data.title) {
-            if (!isValidData(data.title))
-                return res.status(400).send({ status: false, msg: `${data.title} is not a valid title` })
             if (!/^([a-zA-Z ]+)$/.test(data.title.trim())) {
                 return res.status(400).send({ status: false, msg: `${data.title} is not a valid title` });
             }
