@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken")
 const bookModel = require('../models/booksModel')
+const userModel = require("../models/userModel");
 const {isValidObjectId} = require("../validator/validation")
 
 //<<------------------------------------------------AUTHENTICATION------------------------------------------------------------>>
@@ -9,15 +10,22 @@ const authentication = function (req, res, next) {
         if (!token) {
             return res.status(401).send({ status: false, msg: "Token missing" })
         }
-
         try{
-        var decodedtoken = jwt.verify(token, "group-25")
+            var decodedtoken = jwt.verify(token, "group-25")
+            console.log(decodedtoken)
         }
         catch(err){
-            return res.status(401).send({status:false,msg:"token is invalid"})
+            return res.status(401).send({status:false,msg:"token is invalid or expired"})
 
         }
-        // if (!decodedtoken) {return res.status(401).send({ status: false, msg: "Token invalid" })}
+
+        // let decoded = jwt.verify(token, "group-25", { ignoreExpiration: true });
+        // console.log(decoded)
+        // if (Date.now() > decoded.exp * 1000) {
+        // return res.status(401).send({ status: false, message: "token is expired" });
+        // }
+
+        //if (!decodedtoken) {return res.status(401).send({ status: false, msg: "Token invalid" })}
      
 
         req.decodedtoken = decodedtoken
@@ -41,16 +49,23 @@ const authorization = async function (req, res, next) {
 
         //userId of the owner of the book
         let ownerOfBook = ""
-       
-        if(!(req.body.userId) && !(req.params.bookId)){
-            return res.status(400).send({status:false,msg:" credential missing for auth"})
-        }
+
+
+// // console.log(req.body.userId)
+// // console.log(req.params.bookId)
+//         if(!((req.body.userId) && (req.params.bookId))){
+//             return res.status(400).send({status:false,msg:" credential missing for auth or body is missing"})
+//         } error for empty body
+
 
         if(req.body.userId){
             const userId = req.body.userId;
             if(!isValidObjectId(userId)){
-                return res.status(400).send({ status: false, msg: "Book id is invalid" })
+                return res.status(400).send({ status: false, msg: "user id is invalid" })
             }
+            const validUser =await userModel.findById(userId)
+            if(!validUser) return res.status(404).send({status:false,msg:"user not found"})
+
             ownerOfBook = userId ;
         }
        else if(req.params.bookId){
@@ -62,7 +77,7 @@ const authorization = async function (req, res, next) {
             const validBook = await bookModel.findById(bookId)
 
             if (!validBook)
-                return res.status(404).send({ status: false, msg: "book with the bookid not found " })
+                return res.status(404).send({ status: false, msg: "book not found " })
             
             // get the user id for requested book
             ownerOfBook = validBook.userId;
@@ -71,7 +86,7 @@ const authorization = async function (req, res, next) {
        
         //check if the logged-in user is requesting to modify their own resources 
         if (ownerOfBook != userId)
-            return res.status(403).send({ status: false, msg: 'Author logged in is not allowed to modify the requested book data' })
+            return res.status(403).send({ status: false, msg: 'Author loggedin is not allowed to modify the requested book data' })
             console.log("Successfully Authorized")
         next()
     }

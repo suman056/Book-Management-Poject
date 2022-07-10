@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-//const moment = require('moment')
 
 const bookSchema = new mongoose.Schema({
 
@@ -42,10 +41,10 @@ const bookSchema = new mongoose.Schema({
     },
     releasedAt: {
         type: Date,
-        //default: moment().format("YYYY-MM-DD"),
         required: true,
     },
-    deletedAt: { type: Date },
+    deletedAt: { type: Date},
+     __v: { type: Number, select: false},
 
 }, { timestamps: true });
 

@@ -2,10 +2,14 @@ const mongoose = require("mongoose");
 
 //checks if the request body is not empty
 //used in 6 APIs
-const isValidRequestBody = function (requestBody) {
+const isValidRequestBody =  function (requestBody) {
     if (!requestBody) return false
     if (Object.keys(requestBody).length == 0) return false;
     return true
+}
+const isValidRequestBody1 =  function (req,res,next) {
+    if (Object.keys(req.body).length == 0) return res.status(400).send({status:false,message:"body cannot be empty"})
+    next()
 }
 
 //checks parameters present in body and is string for specific parameters.
@@ -22,6 +26,6 @@ const isValidObjectId = function (objectId) {
 }
 
 module.exports = {
-    isValidRequestBody, isValidData, isValidObjectId
+    isValidRequestBody, isValidData, isValidObjectId,isValidRequestBody1
 
 }

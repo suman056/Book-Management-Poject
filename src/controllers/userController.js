@@ -1,14 +1,11 @@
 const userModel = require('../models/userModel')
 const jwt = require("jsonwebtoken")
-//const validate = require("../validator/validation")
 
 //<<-------------------------------------------CREATE USER---------------------------------------------------->>
 const createUser = async function (req, res) {
     try {
      
         requestBody = req.body;
-        //db calls for unique validation
-
         //<----create a user document---->
         const savedData = await userModel.create(requestBody)
         return res.status(201).send({ status: true, message: 'Success' , data: savedData })
@@ -31,7 +28,7 @@ const userLogin = async function (req, res) {
         }
 
          //<<-------generating token --------->>
-        const token = jwt.sign({ userId: getData._id }, "group-25",{expiresIn:'24h'})
+        const token = jwt.sign({ userId: getData._id }, "group-25",{expiresIn:'365d'})
         res.status(200).send({ status: true, data: token })
 
     }
