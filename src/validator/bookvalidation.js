@@ -10,7 +10,7 @@ const bookvalidation = async function (req, res, next) {
         const { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = data;
         //validating empty body
         if (!isValidRequestBody(data))
-            return res.status(400).send({ status: false, message: "Body cannot be empty" })
+            return res.status(400).send({ status: false, message: "invalid request params!! please provide details" })
 
         //validating title is entered and valid
         if (!isValidData(title))

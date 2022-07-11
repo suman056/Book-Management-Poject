@@ -23,8 +23,9 @@ const userLogin = async function (req, res) {
 
         //check if user is valid 
         const getData = await userModel.findOne({ email: email, password: password })
+        
         if (!getData) {
-            return res.status(401).send({ status: false, msg: "Incorrect email or password" })
+            return res.status(401).send({ status: false, message: "Incorrect  password" })
         }
 
          //<<-------generating token --------->>

@@ -13,9 +13,9 @@ const createReview = async function (req, res) {
         let bookCheck = await bookModel.findById({ _id: book.bookId, isDeleted: false })
         if (!bookCheck)
             return res.status(404).send({ status: false, message: "book not found" })
-        if (!reviewedBy) {
-            reviewedBy = "guest"
-        }
+        // if (!reviewedBy) {
+        //     reviewedBy = "guest"
+        // }
         if (!reviewedAt) {
             reviewedAt = Date.now()
         }
@@ -24,6 +24,7 @@ const createReview = async function (req, res) {
         let createReview = await reviewModel.create(requestBody)
 
         const reviews = await reviewModel.find({ bookId: book.bookId, isDeleted: false }).select({ _id: 1, bookId: 1, reviewedBy: 1, reviewedAt: 1, rating: 1, review: 1 });
+       
         let response = { ...bookDetails.toObject(), reviewsData: reviews }
 
         res.status(201).send({ status: true, message: "Success", data: response })

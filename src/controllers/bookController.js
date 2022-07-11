@@ -21,6 +21,7 @@ const createBook = async function (req, res) {
 
 const getBookbyQuerry = async function (req, res) {
     try {
+        
         let requestData = req.query
         const {category,subcategory,userId} = requestData
         // console.log(requestData)
@@ -35,6 +36,7 @@ const getBookbyQuerry = async function (req, res) {
                 if (Category.length == 0)
                 return res.status(404).send({ status: false, message: "this category not found" })
         }
+
                   //<---------------check subcatergory present and (if)proper format or not--------------->//
         if (subcategory) {
                      filter.subcategory = subcategory

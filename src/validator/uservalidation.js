@@ -39,7 +39,7 @@ const checkCreate = async function (req, res, next) {
         const requestBody = req.body
 
         if (!isValidRequestBody(requestBody)) {
-            return res.status(400).send({ status: false, message: "Request body is empty!! Please provide the college details" })
+            return res.status(400).send({ status: false, message: "invalid request params!! please provide details" })
         }
 
         const { title, name, phone, email, password, address } = requestBody;
@@ -69,12 +69,35 @@ const checkCreate = async function (req, res, next) {
         }
 
         if (missdata) {
-            let message = missdata + " is missing  or not String type"
+            let message = missdata + " is missing "
             return res.status(400).send({ status: false, message: message })
         }
 
         //validating other constraints
-        if (!(['Mr', "Mrs", "Miss"].includes(title))) {
+        if (typeof title !== "string") {
+            return res.status(400).send("type of title should be string")
+        }
+
+        if (typeof name !== "string") {
+            return res.status(400).send("type of name should be string")
+        }
+
+        if (typeof email !== "string") {
+            return res.status(400).send("type of email should be string")
+        }
+
+        if (typeof password !== "string") {
+            return res.status(400).send("type of password should be string")
+        }
+
+        if (typeof phone !== "number") {
+            return res.status(400).send("type of phone should be number")
+        }
+
+       
+
+
+        if (!(["Mr", "Mrs", "Miss"].includes(title))) {
             return res.status(400).send({ status: false, message: "title not valid : it should be Mr ,Mrs, Miss" })
         }
 
@@ -95,15 +118,32 @@ const checkCreate = async function (req, res, next) {
             return res.status(400).send({ status: false, message: result })
         }
         if (address) {
-            if (address.street){
+            if (typeof address !== "object") {
+                return res.status(400).send({ status: false, message: "address should be in object format" })
+            }
+
+
+            if (address.street) {
+                if(typeof address.street !== "string"){
+                    return res.status(400).send("type of street should be string")
+                }
+
                 if (!/^([a-zA-Z 0-9\S]+)$/.test(address.street))
                     return res.status(400).send({ status: false, message: "street is not in valid format and no special charaters allowed " })
             }
-            if (address.city){
+            if (address.city) {
+                if(typeof address.city !== "string"){
+                    return res.status(400).send("type of city should be string")
+                }
                 if (!/^([a-zA-Z]+)$/.test(address.city))
                     return res.status(400).send({ status: false, message: "city is not valid format " })
             }
-            if (address.pincode){
+            if (address.pincode) {
+                if(typeof address.pincode !== "string"){
+                    return res.status(400).send("type of pincode should be string")
+
+                }
+
                 if (!/^[1-9]{1}[0-9]{2}[0-9]{3}$/.test(address.pincode))
                     return res.status(400).send({ status: false, message: "pincode should be in number and only 6 digits " })
 
@@ -127,7 +167,7 @@ const checkCreate = async function (req, res, next) {
 
 }
 
-const checkLogin = function (req, res, next) {
+const checkLogin = async function (req, res, next) {
     try {
 
         const requestBody = req.body
@@ -135,7 +175,7 @@ const checkLogin = function (req, res, next) {
         if (!isValidRequestBody(requestBody)) {
             return res.status(400).send({ status: false, message: "Request body is empty!! Please provide the email and password" })
         }
-
+         
 
         const { email, password } = requestBody
 
@@ -144,16 +184,30 @@ const checkLogin = function (req, res, next) {
             return res.status(400).send({ status: false, message: "Please provide email" })
 
         }
-
+        if(typeof email!== "string"){
+            return res.status(400).send("type of email should be string")
+        }
 
         if (!isValidData(password)) {
             return res.status(400).send({ status: false, message: "Please provide password" })
 
         }
+        if(typeof password !== "string"){
+            return res.status(400).send("type of password should be string")
+        }
+
+
+
+
 
         if (!verifyEmail(email)) {
             return res.status(400).send({ status: false, message: "Email format is invalid" })
 
+        }
+       let checkemail = await userModel.find({ email: email });
+
+        if (checkemail.length === 0) {
+            return res.status(400).send({ status: false, message: "email is not registered" });
         }
 
 
