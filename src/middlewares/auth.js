@@ -6,17 +6,17 @@ const { isValidObjectId } = require("../validator/validation")
 //<<------------------------------------------------AUTHENTICATION------------------------------------------------------------>>
 const authentication = function (req, res, next) {
     try {
-        const token = req.headers["X-Auth-Token"] || req.headers["x-auth-token"]
+        const token = req.headers["x-Api-key"] || req.headers["x-api-key"]
         if (!token) {
             return res.status(401).send({ status: false, msg: "Token missing" })
         }
         try {
             var decodedtoken = jwt.verify(token, "group-25", { ignoreExpiration: true });
-            console.log(decodedtoken)
+            // console.log(decodedtoken)
             if (Date.now() > decodedtoken.exp * 1000) {
                 return res.status(401).send({ status: false, message: "token is expired" });
             }
-            console.log(decodedtoken)
+            // console.log(decodedtoken)
         }
         catch (err) {
             return res.status(401).send({ status: false, msg: "token is invalid " })
