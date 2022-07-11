@@ -63,17 +63,23 @@ const updateReview = async function (req, res) {
         let reqReview = await reviewModel.findById(reviewId);
 
         if (!reqReview)
-            return res.status(404).send({ status: false, msg: "No review with this id Exists" })
+        return res.status(404).send({ status: false, msg: "No review with this id Exists" })
+
+
+        if (reqBook._id != reqReview.bookId)
+        return res.status(404).send({ status: false, msg: "Both review and book exist, but it's not the review of specified book" })
+
+
+        
 
         if (reqReview.isDeleted == true)
             return res.status(404).send({ status: false, msg: "This Review is not found : already deleted" })
 
 
         //check if the review is of the specified book    
-        let relReview = await reviewModel.findOne({ _id: reviewId, bookId: bookId });
+        //  let relReview = await reviewModel.findOne({ _id: reviewId, bookId: bookId });
 
-        if (!relReview)
-            return res.status(404).send({ status: false, msg: "Both review and book exist, but it's not the review of specified book" })
+       
 
 
         //Since both id's are valid , now validate contents and update review 
