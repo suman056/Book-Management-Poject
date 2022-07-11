@@ -12,7 +12,7 @@ const {createBook,getBookbyQuerry,bookDetail,updateBook,deleteBookbyPath}=requir
 //================================review logic importing==================================//
 const {createReview,updateReview,deleteReview } =require('../controllers/reviewController')
 const{reviewCheck}=require("../validator/reviewvalidation")
-const{isValidRequestBody1}=require("../validator/validation")
+const{RequestBody}=require("../validator/validation")
 
 
 
@@ -26,13 +26,13 @@ router.post('/login',checkLogin,userLogin)
 
 //================================routes for books============================================================//
        //<-------------------book create------------------------->//
-router.post('/books',isValidRequestBody1,authentication,authorization,bookvalidation,createBook)
+router.post('/books',RequestBody,authentication,authorization,bookvalidation,createBook)
        //<------------------get book-------------------------->//
 router.get('/books',authentication,getBookbyQuerry)
        //<-----------------get book by bookId-------------->//
 router.get('/books/:bookId',authentication,bookDetail)
        //<-----------------update book-------------------->//
-router.put('/books/:bookId',isValidRequestBody1,authentication,authorization,updateBook)
+router.put('/books/:bookId',RequestBody,authentication,authorization,updateBook)
        //<-----------------delete book------------------>//
 router.delete('/books/:bookId',authentication,authorization,deleteBookbyPath)
 

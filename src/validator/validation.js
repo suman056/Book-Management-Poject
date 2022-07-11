@@ -3,14 +3,13 @@ const mongoose = require("mongoose");
 //checks if the request body is not empty
 //used in 6 APIs
 const isValidRequestBody =  function (requestBody) {
-    if (!requestBody) return false
     if (Object.keys(requestBody).length == 0) return false;
-    return true
+    return true 
 }
-const isValidRequestBody1 =  function (req,res,next) {
+const RequestBody =  function (req,res,next) {
     if (Object.keys(req.body).length == 0) return res.status(400).send({status:false,message:"body cannot be empty"})
     next()
-}
+}   //applicable only on create and update Book 
 
 //checks parameters present in body and is string for specific parameters.
 const isValidData = function (value) {
@@ -26,6 +25,5 @@ const isValidObjectId = function (objectId) {
 }
 
 module.exports = {
-    isValidRequestBody, isValidData, isValidObjectId,isValidRequestBody1
-
+    isValidRequestBody, isValidData, isValidObjectId,RequestBody
 }

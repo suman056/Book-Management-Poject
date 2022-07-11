@@ -14,15 +14,15 @@ const reviewCheck = function (req, res, next) {
 
         //check if each mandatory field is present in request body
         let invalidParam = "";
-
-        // if (!isValidObjectId(bookId)) {
-        //     invalidParam = "bookId"
-        // }
-        if (!isValidData(reviewedBy)) {
-            invalidParam = invalidParam + "reviewedBy"
+        if(bookId){
+        if (!isValidObjectId(bookId))  invalidParam = "bookId"
+        }
+        if(reviewedBy){
+        if (!isValidData(reviewedBy)) invalidParam = invalidParam + "reviewedBy"
 
         }
-        if (!isValidData(reviewedAt)) {
+        if(reviewedAt){
+        if (!isValidData(reviewedAt)) 
             invalidParam = invalidParam + " " + "reviewedAt"
 
         }

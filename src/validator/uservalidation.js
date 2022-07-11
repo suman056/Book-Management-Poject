@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const userModel = require("../models/userModel");
-const { isValidRequestBody,isValidData } = require("./validation")
+const { isValidRequestBody, isValidData } = require("./validation")
 
 
 
@@ -10,7 +10,7 @@ const verifyPassword = function (password) {
 
     //minimum password length validation  
     if (password.length < 8) {
-  
+
         message = "Password length must be atleast 8 characters"
         return message;
     }
@@ -90,29 +90,33 @@ const checkCreate = async function (req, res, next) {
             return res.status(400).send({ status: false, message: "Email format is invalid" })
 
         }
-        const result = verifyPassword(password)
+        const result = verifyPassword(password.trim())
         if (result != true) {
             return res.status(400).send({ status: false, message: result })
         }
-       if(address){
-        if (!/^([a-zA-Z 0-9\S]+)$/.test(address.street)) {
-        return res.status(400).send({status:false,message:"street is not in valid format and no special charaters allowed "})
-       }
-       if (!/^([a-zA-Z]+)$/.test(address.city)) {
-        return res.status(400).send({status:false,message:"city is not valid format "})
-       }
-       if (!/^[1-9]{1}[0-9]{2}[0-9]{3}$/.test(address.pincode)) {
-        return res.status(400).send({status:false,message:"pincode should be in number and only 6 digits "})
-       }
-    }
-    let checkphone = await userModel.find({phone:phone});
-    if (checkphone.length !== 0) {
-        return res.status(400).send({ status: false, message: "phone is already registered" });
-    }
-    let checkemail = await userModel.find({email:email});
-    if (checkemail.length !== 0) {
-        return res.status(400).send({ status: false, message: "email is already registered" });
-    }
+        if (address) {
+            if (address.street){
+                if (!/^([a-zA-Z 0-9\S]+)$/.test(address.street))
+                    return res.status(400).send({ status: false, message: "street is not in valid format and no special charaters allowed " })
+            }
+            if (address.city){
+                if (!/^([a-zA-Z]+)$/.test(address.city))
+                    return res.status(400).send({ status: false, message: "city is not valid format " })
+            }
+            if (address.pincode){
+                if (!/^[1-9]{1}[0-9]{2}[0-9]{3}$/.test(address.pincode))
+                    return res.status(400).send({ status: false, message: "pincode should be in number and only 6 digits " })
+
+            }
+        }
+        let checkphone = await userModel.find({ phone: phone });
+        if (checkphone.length !== 0) {
+            return res.status(400).send({ status: false, message: "phone is already registered" });
+        }
+        let checkemail = await userModel.find({ email: email });
+        if (checkemail.length !== 0) {
+            return res.status(400).send({ status: false, message: "email is already registered" });
+        }
         //if all validations are correct then go to controller
         next()
 

@@ -4,11 +4,11 @@ const jwt = require("jsonwebtoken")
 //<<-------------------------------------------CREATE USER---------------------------------------------------->>
 const createUser = async function (req, res) {
     try {
-     
         requestBody = req.body;
+        requestBody.name = requestBody.name.trim().split(" ").filter(word => word).join(" ");
         //<----create a user document---->
         const savedData = await userModel.create(requestBody)
-        return res.status(201).send({ status: true, message: 'Success' , data: savedData })
+        return res.status(201).send({ status: true, message: 'Success', data: savedData })
     }
     catch (err) {
         res.status(500).send({ status: false, error: err.message })
