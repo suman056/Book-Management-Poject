@@ -14,16 +14,17 @@ const bookvalidation = async function (req, res, next) {
 
         //validating title is entered and valid
         if (!isValidData(title))
-            return res.status(400).send({ status: false, message: "please enter title key or valid tilte" })
-        if (!/^([a-zA-Z 0-9]+)$/.test(title.trim())) {
-            return res.status(400).send({ status: false, message: "enter valid title in alphabets only " });
+            return res.status(400).send({ status: false, message: "please enter title " })
+       
+            if ( typeof title!=="string" ||!/^([a-zA-Z 0-9]+)$/.test(title.trim())) {
+            return res.status(400).send({ status: false, message: "enter valid title i.e alphanumeric string" });
         }
 
 
         //validating excerpt is entered and valid
         if (!isValidData(excerpt))
-            return res.status(400).send({ status: false, message: "please enter excerpt key or valid excerpt " })
-        if (!/^([a-zA-Z_',.()!\S ]+)$/.test(data.excerpt.trim())) {
+            return res.status(400).send({ status: false, message: "please enter excerpt " })
+        if (typeof excerpt!=="string" ||!/^([a-zA-Z_',.()!\S ]+)$/.test(data.excerpt.trim())) {
             return res.status(400).send({ status: false, message: "enter valid excerpt in alphabets only" });
         }
 
@@ -45,14 +46,14 @@ const bookvalidation = async function (req, res, next) {
         //Validating category is entered and valid
 
         if (!isValidData(category))
-            return res.status(400).send({ status: false, message: " please enter category or valid category " })
+            return res.status(400).send({ status: false, message: " please enter category " })
         if (!/^([a-zA-Z ]+)$/.test(category.trim())) {
             return res.status(400).send({ status: false, message: " enter valid category in alphabets only" });
         }
 
         //validating subCategory is entered and valid
-        if (typeof subcategory === "undefined" || subcategory === null)
-            return res.status(400).send({ status: false, message: "please enter subcategory key or valid subcategory" })
+        if (typeof subcategory === "undefined" || subcategory === null||!isValidData(subcategory))
+            return res.status(400).send({ status: false, message: "please enter subcategory key " })
         if (subcategory.length == 0) {
             return res.status(400).send({ status: false, message: "subcategory is not valid" });
         }

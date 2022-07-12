@@ -26,13 +26,13 @@ router.post('/login',checkLogin,userLogin)
 
 //================================routes for books============================================================//
        //<-------------------book create------------------------->//
-router.post('/books',RequestBody,authentication,authorization,bookvalidation,createBook)
+router.post('/books',bookvalidation,authentication,authorization,createBook)
        //<------------------get book-------------------------->//
 router.get('/books',authentication,getBookbyQuerry)
        //<-----------------get book by bookId-------------->//
 router.get('/books/:bookId',authentication,bookDetail)
        //<-----------------update book-------------------->//
-router.put('/books/:bookId',RequestBody,authentication,authorization,updateBook)
+router.put('/books/:bookId',authentication,RequestBody,authorization,updateBook)
        //<-----------------delete book------------------>//
 router.delete('/books/:bookId',authentication,authorization,deleteBookbyPath)
 
@@ -45,12 +45,13 @@ router.post('/books/:bookId/review',reviewCheck,createReview)
 router.put('/books/:bookId/review/:reviewId', updateReview )
 router.delete('/books/:bookId/review/:reviewId', deleteReview )
 
-// router.all("/**", function (req, res) {
-//     res.status(404).send({
-//         status: false,
-//         msg: "The api you request is not available"
-//     })
-// })
+
+router.all("/**", function (req, res) {
+    res.status(404).send({
+        status: false,
+        msg: "The api you request is not available"
+    })
+})
 
 module.exports = router;
 
