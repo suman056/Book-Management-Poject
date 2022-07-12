@@ -5,7 +5,7 @@ const router=express.Router()
 const {checkCreate, checkLogin}=require('../validator/uservalidation')
 const {createUser, userLogin} =require('../controllers/userController')
 //==================================auth logic importing=====================================//
-const {authentication,authorization}=require('../middlewares/auth')
+const {authentication}=require('../middlewares/auth')
 //=================================book logic importing===================================//
 const bookvalidation=require('../validator/bookvalidation')
 const {createBook,getBookbyQuerry,bookDetail,updateBook,deleteBookbyPath}=require('../controllers/bookController')
@@ -26,15 +26,15 @@ router.post('/login',checkLogin,userLogin)
 
 //================================routes for books============================================================//
        //<-------------------book create------------------------->//
-router.post('/books',bookvalidation,authentication,authorization,createBook)
+router.post('/books',authentication,bookvalidation,createBook)
        //<------------------get book-------------------------->//
 router.get('/books',authentication,getBookbyQuerry)
        //<-----------------get book by bookId-------------->//
 router.get('/books/:bookId',authentication,bookDetail)
        //<-----------------update book-------------------->//
-router.put('/books/:bookId',authentication,RequestBody,authorization,updateBook)
+router.put('/books/:bookId',authentication,updateBook)
        //<-----------------delete book------------------>//
-router.delete('/books/:bookId',authentication,authorization,deleteBookbyPath)
+router.delete('/books/:bookId',authentication,deleteBookbyPath)
 
 
 
@@ -42,7 +42,9 @@ router.delete('/books/:bookId',authentication,authorization,deleteBookbyPath)
 // =============================routes for reviews================================================================//
         //<----------------review create------------------->//
 router.post('/books/:bookId/review',reviewCheck,createReview)
+
 router.put('/books/:bookId/review/:reviewId', updateReview )
+
 router.delete('/books/:bookId/review/:reviewId', deleteReview )
 
 

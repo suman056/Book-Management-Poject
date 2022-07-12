@@ -54,12 +54,19 @@ const reviewCheck = function (req, res, next) {
       return res.status(400).send({ status: false, message: message })
    }
    // =================rating validation===============================//
-   if (typeof rating != "number" || !ratingCheck(rating))
+   if (typeof rating != "number" )
 
       return res.status(400).send({ status: false, message: "rating is not in a proper format" })
 
+   if(!ratingCheck(rating))   
+       
+      return res.status(400).send({status:false,message:"rating should be between 1 & 5"})
    //==================reviewat validation===========================//
-   if (reviewedAt) {
+   if (!reviewedAt) {
+      return res.status(400).send({ status: false, message: "reviewedAt is required" })
+  }
+
+
 
       if (!/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/.test(reviewedAt))
 
@@ -67,7 +74,8 @@ const reviewCheck = function (req, res, next) {
 
           
 
-  }
+  
+  
 
    // if (reviewedAt) {
 

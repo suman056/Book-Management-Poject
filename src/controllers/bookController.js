@@ -123,20 +123,18 @@ const updateBook = async function (req, res) {
 
 
         //validating bookId
-        if (!isValidData(userId))
+        if (!isValidData(bookId))
             return res.status(400).send({ status: false, message: "please enter userId " })
 
         if (!isValidObjectId(bookId)) {
             return res.status(400).send({ status: false, msg: "Book id is invalid" })
         }
-        const validBook = await bookModel.findById(bookId)
+        const validBook = await  bookModel.findOne({ _id: bookId, isDeleted: false })
 
         if (!validBook)
             return res.status(404).send({ status: false, msg: "No such Book Exits" })
         
-        if (bookId.isDeleted == true)
-            return res.status(404).send({ status: false, msg: "This Book is not Present" });
-       
+        
 
         //check if the logged-in user is requesting to modify their own resources 
         if (validBook.userId != req.decodedtoken.userId)
@@ -211,13 +209,12 @@ const deleteBookbyPath = async function (req, res) {
         if (!isValidObjectId(bookId)) {
             return res.status(400).send({ status: false, msg: "Book id is invalid" })
         }
-        const validBook = await bookModel.findById(bookId)
+        const validBook = await  bookModel.findOne({ _id: bookId, isDeleted: false })
 
         if (!validBook)
             return res.status(404).send({ status: false, msg: "No such Book Exits" })
         
-        if (bookId.isDeleted == true)
-            return res.status(404).send({ status: false, msg: "This Book is not Present" });
+        
        
 
         //check if the logged-in user is requesting to modify their own resources 
@@ -237,7 +234,7 @@ const deleteBookbyPath = async function (req, res) {
 
 
 
-        res.status(200).send({ status: true, message: "book is deleted Successfully", data: bookData })
+        res.status(200).send({ status: true, message: "book is deleted Successfully"})
     }
     catch (error) { res.status(500).send({ status: false, message: error.message }) }
 
