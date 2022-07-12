@@ -7,19 +7,40 @@ const validator = require('validator')
 const bookvalidation = async function (req, res, next) {
     try {
         let data = req.body;
-        const { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = data;
+        
         //validating empty body
         if (!isValidRequestBody(data))
             return res.status(400).send({ status: false, message: "invalid request params!! please provide details" })
 
-        //validating title is entered and valid
-        if (!isValidData(title))
-            return res.status(400).send({ status: false, message: "please enter title " })
-       
-            if ( typeof title!=="string" ||!/^([a-zA-Z 0-9]+)$/.test(title.trim())) {
-            return res.status(400).send({ status: false, message: "enter valid title i.e alphanumeric string" });
+        const { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = data;
+        
+        //validating userId is entered is valid
+        if (!isValidData(userId))
+            return res.status(400).send({ status: false, message: "please enter userId key" })
+
+        if (!isValidObjectId(userId)) {
+            return res.status(400).send({ status: false, msg: "user id is invalid" })
         }
 
+        
+        const validUser = await userModel.findById(userId)
+        if (!validUser) return res.status(404).send({ status: false, msg: "user not found" })
+
+
+        //<======Authorizing User=======>
+        //check if the logged-in user is requesting to modify their own resources 
+        if (userId != req.decodedtoken.userId)
+            return res.status(403).send({ status: false, msg: 'Author loggedin is not allowed to modify the requested book data' })
+        console.log("Successfully Authorized")
+
+
+        //<=====Validation=====>        
+        //validating title is entered and valid
+        if (!isValidData(title))
+            return res.status(400).send({ status: false, message: "please enter title key or valid tilte" })
+        if (!/^([a-zA-Z 0-9]+)$/.test(title.trim())) {
+            return res.status(400).send({ status: false, message: "enter valid title in alphabets only " });
+        }
 
         //validating excerpt is entered and valid
         if (!isValidData(excerpt))
@@ -28,11 +49,11 @@ const bookvalidation = async function (req, res, next) {
             return res.status(400).send({ status: false, message: "enter valid excerpt in alphabets only" });
         }
 
-        //validating userId is entered is valid
-        if (!isValidData(userId))
-            return res.status(400).send({ status: false, message: "please enter userId key" })
-        if (!isValidObjectId(userId))
-            return res.status(400).send({ status: false, message: `${userId} is not a valid user ID` })
+        // //validating userId is entered is valid
+        // if (!isValidData(userId))
+        //     return res.status(400).send({ status: false, message: "please enter userId key" })
+        // if (!isValidObjectId(userId))
+        //     return res.status(400).send({ status: false, message: `${userId} is not a valid user ID` })
 
 
         //validating ISBN is entered and valid

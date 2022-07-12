@@ -115,23 +115,38 @@ const bookDetail = async function (req, res) {
 const updateBook = async function (req, res) {
     try {
         let data = req.body;
-        let id = req.params;
+        const bookId = req.params.bookId;
 
-        const { title, excerpt, ISBN, releasedAt } = data;
-
-        var details = {}
         //validating empty body
         if (!isValidRequestBody(data))
             return res.status(400).send({ status: false, msg: "Body cannot be empty" });
 
+
         //validating bookId
-        let bookId = await bookModel.findById(id.bookId);
+        if (!isValidData(userId))
+            return res.status(400).send({ status: false, message: "please enter userId " })
 
-        if (!bookId)
-            return res.status(404).send({ status: false, msg: "No such Book Exits" });
+        if (!isValidObjectId(bookId)) {
+            return res.status(400).send({ status: false, msg: "Book id is invalid" })
+        }
+        const validBook = await bookModel.findById(bookId)
 
+        if (!validBook)
+            return res.status(404).send({ status: false, msg: "No such Book Exits" })
+        
         if (bookId.isDeleted == true)
             return res.status(404).send({ status: false, msg: "This Book is not Present" });
+       
+
+        //check if the logged-in user is requesting to modify their own resources 
+        if (validBook.userId != req.decodedtoken.userId)
+            return res.status(403).send({ status: false, msg: 'Author loggedin is not allowed to modify the requested book data' })
+        console.log("Successfully Authorized")
+
+
+        const { title, excerpt, ISBN, releasedAt } = data;
+
+        var details = {}
 
         //Validating title and  check Present in DB or Not
         if (title) {
@@ -187,7 +202,28 @@ const updateBook = async function (req, res) {
 //================================================Delete by path params==================================//
 const deleteBookbyPath = async function (req, res) {
     try {
-        let bookId = req.params.bookId
+        const bookId = req.params.bookId;
+
+        //validating bookId
+        if (!isValidData(bookId))
+            return res.status(400).send({ status: false, message: "please enter userId " })
+
+        if (!isValidObjectId(bookId)) {
+            return res.status(400).send({ status: false, msg: "Book id is invalid" })
+        }
+        const validBook = await bookModel.findById(bookId)
+
+        if (!validBook)
+            return res.status(404).send({ status: false, msg: "No such Book Exits" })
+        
+        if (bookId.isDeleted == true)
+            return res.status(404).send({ status: false, msg: "This Book is not Present" });
+       
+
+        //check if the logged-in user is requesting to modify their own resources 
+        if (validBook.userId != req.decodedtoken.userId)
+            return res.status(403).send({ status: false, msg: 'Author loggedin is not allowed to modify the requested book data' })
+        console.log("Successfully Authorized")
         //<-------------------------find book by book Id---------------------->//
         let book = await bookModel.findById({ _id: bookId })//.select({ _id: 0, userId: 1, isDeleted: 1 })
 
