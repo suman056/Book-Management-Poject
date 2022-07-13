@@ -188,7 +188,7 @@ const updateBook = async function (req, res) {
         }
 
         //updateBook
-        let updatedata = await bookModel.findOneAndUpdate({ _id: id.bookId }, details, { new: true }).select({ __v: 0 });
+        let updatedata = await bookModel.findOneAndUpdate({ _id: bookId }, details, { new: true }).select({ __v: 0 });
 
         res.status(200).send({ status: true, message: 'Success', data: updatedata });
 
