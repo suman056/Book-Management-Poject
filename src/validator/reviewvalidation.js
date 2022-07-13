@@ -62,15 +62,15 @@ const reviewCheck = function (req, res, next) {
        
       return res.status(400).send({status:false,message:"rating should be between 1 & 5"})
    //==================reviewat validation===========================//
-    if (!reviewedAt) {
-      return res.status(400).send({ status: false, message: "reviewedAt is required" })
-  }
+//     if (!reviewedAt) {
+//       return res.status(400).send({ status: false, message: "reviewedAt is required" })
+//   }
 
-
-
+     
+     if(reviewedAt){
       if (!/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/.test(reviewedAt))
 
-          return res.status(400).send({ status: false, message: "date format should be in YYYY-MM-DD" })
+          return res.status(400).send({ status: false, message: "date format should be in YYYY-MM-DD" })}
 
           
 
