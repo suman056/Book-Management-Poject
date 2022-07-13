@@ -75,23 +75,23 @@ const checkCreate = async function (req, res, next) {
 
         //validating other constraints
         if (typeof title !== "string") {
-            return res.status(400).send("type of title should be string")
+            return res.status(400).send({status:false,message:"type of title should be string"})
         }
 
         if (typeof name !== "string") {
-            return res.status(400).send("type of name should be string")
+            return res.status(400).send({status:false,message:"type of name should be string"})
         }
 
         if (typeof email !== "string") {
-            return res.status(400).send("type of email should be string")
+            return res.status(400).send({status:false,message:"type of email should be string"})
         }
 
         if (typeof password !== "string") {
-            return res.status(400).send("type of password should be string")
+            return res.status(400).send({status:false,message:"type of password should be string"})
         }
 
         if (typeof phone !== "number") {
-            return res.status(400).send("type of phone should be number")
+            return res.status(400).send({status:false,message:"type of phone should be number"})
         }
 
        
