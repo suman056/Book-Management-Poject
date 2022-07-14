@@ -38,7 +38,7 @@ const bookvalidation = async function (req, res, next) {
         //validating title is entered and valid
         if (!isValidData(title))
             return res.status(400).send({ status: false, message: "please enter title key or valid tilte" })
-        if (!/^([a-zA-Z 0-9]+)$/.test(title.trim())) {
+        if (!/^([a-zA-Z 0-9?.]+)$/.test(title.trim())) {
             return res.status(400).send({ status: false, message: "enter valid title in alphabets only " });
         }
 

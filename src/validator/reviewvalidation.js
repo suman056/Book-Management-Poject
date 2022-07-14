@@ -28,12 +28,8 @@ const reviewCheck = function (req, res, next) {
 
    let missdata = ""
 
-   // if (!bookId) {
-   //    missdata = missdata + "bookId"
-   // }
-   // if (!reviewedAt) {
-   //     missdata = missdata + " " + "reviewedAt"
-   //  }
+   
+   
    let bookID = bookId.trim()
 
    if (bookID.length == 0) {
@@ -62,9 +58,7 @@ const reviewCheck = function (req, res, next) {
        
       return res.status(400).send({status:false,message:"rating should be between 1 & 5"})
    //==================reviewat validation===========================//
-//     if (!reviewedAt) {
-//       return res.status(400).send({ status: false, message: "reviewedAt is required" })
-//   }
+
 
      
      if(reviewedAt){
@@ -73,22 +67,6 @@ const reviewCheck = function (req, res, next) {
           return res.status(400).send({ status: false, message: "date format should be in YYYY-MM-DD" })}
 
           
-
-  
-  
-
-   // if (reviewedAt) {
-
-   //    let dateCheck = new Date(reviewedAt).getTime()
-
-   //    console.log(dateCheck)
-
-   //    if (isNaN(dateCheck)) {
-
-   //       return res.status(400).send({ status: false, message: "reviewAt is not in a proper format " })
-
-   //    }
-   // }
    // ===========================review validation=============================================//
    if (review) {
 

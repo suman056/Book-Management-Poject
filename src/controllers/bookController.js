@@ -26,38 +26,39 @@ const getBookbyQuerry = async function (req, res) {
     try {
 
         let requestData = req.query
-        
+
         const { category, subcategory, userId } = requestData
-        
+
         // console.log(requestData)
         //<-----------------------taking filter for searching------------------>//
         const filter = {}
 
         filter.isDeleted = false
         //<---------------check catergory present and (if)proper format or not----------------->//
-        
-        
+
+
         if (category) {
-           
-            filter.category = category
-            // let Category = await bookModel.find({ category: category })
-            // if (Category.length == 0)
-                // return res.status(404).send({ status: false, message: "this category not found" })
+            let Category = category.trim()
+
+            filter.category = Category
+
         }
 
         //<---------------check subcatergory present and (if)proper format or not--------------->//
         if (subcategory) {
-            filter.subcategory = subcategory
-            // let subCategory = await bookModel.find({ subcategory: subcategory })
-            // if (subCategory.length == 0)
-                // return res.status(404).send({ status: false, message: "this subcategory not found" })
+            let Subcategory = subcategory.trim()
+            
+            filter.subcategory = Subcategory
+
         }
         //<---------------check userId present and (if)proper format or not----------------->//
         if (userId) {
-            if (!isValidObjectId(userId))
+            let UserId = userId.trim()
+
+            if (!isValidObjectId(UserId))
                 return res.status(400).send({ status: false, message: "please give proper userId" })
 
-            else filter.userId = userId
+            else filter.userId = UserId
 
         }
         // console.log(filter)
@@ -129,12 +130,12 @@ const updateBook = async function (req, res) {
         if (!isValidObjectId(bookId)) {
             return res.status(400).send({ status: false, msg: "Book id is invalid" })
         }
-        const validBook = await  bookModel.findOne({ _id: bookId, isDeleted: false })
+        const validBook = await bookModel.findOne({ _id: bookId, isDeleted: false })
 
         if (!validBook)
             return res.status(404).send({ status: false, msg: "No such Book Exits" })
-        
-        
+
+
 
         //check if the logged-in user is requesting to modify their own resources 
         if (validBook.userId != req.decodedtoken.userId)
@@ -209,13 +210,13 @@ const deleteBookbyPath = async function (req, res) {
         if (!isValidObjectId(bookId)) {
             return res.status(400).send({ status: false, msg: "Book id is invalid" })
         }
-        const validBook = await  bookModel.findOne({ _id: bookId, isDeleted: false })
+        const validBook = await bookModel.findOne({ _id: bookId, isDeleted: false })
 
         if (!validBook)
             return res.status(404).send({ status: false, msg: "No such Book Exits" })
-        
-        
-       
+
+
+
 
         //check if the logged-in user is requesting to modify their own resources 
         if (validBook.userId != req.decodedtoken.userId)
@@ -234,7 +235,7 @@ const deleteBookbyPath = async function (req, res) {
 
 
 
-        res.status(200).send({ status: true, message: "book is deleted Successfully"})
+        res.status(200).send({ status: true, message: "book is deleted Successfully" })
     }
     catch (error) { res.status(500).send({ status: false, message: error.message }) }
 

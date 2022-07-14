@@ -7,7 +7,7 @@ const route = require("./routes/route")
 
 app.use(bodyParser)
 
-mongoose.connect("mongodb+srv://Jagcho:71nEXJtXcYfVx8T6@cluster0.5bg4mzz.mongodb.net/group25Database"
+mongoose.connect("mongodb+srv://suman:Mdhang%40123@atlascluster.tlenk.mongodb.net/bookManagement"
     , { useNewUrlParser: true })
     .then(() => console.log("MongoDb is connected"))
     .catch(err => console.log(err))
